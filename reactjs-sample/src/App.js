@@ -1,15 +1,46 @@
-import Header from "./Header";
-import Content from "./Content";
-import Footer from "./Footer";
+import Header from './Header';
+import Content from './Content';
+import Footer from './Footer';
+import { useState } from 'react';
 
 function App() {
-  return (
-    <div className="App">
-      <Header />
-      <Content />
-      <Footer />
-    </div>
-  );
+	const [items, setItems] = useState([
+		{
+			id: 1,
+			checked: true,
+			item: 'Item One',
+		},
+		{
+			id: 2,
+			checked: false,
+			item: 'Item Two',
+		},
+		{
+			id: 3,
+			checked: false,
+			item: 'Item Three',
+		},
+	]);
+
+	const handleCheck = (id) => {
+		const listItems = items.map((item) => (item.id === id ? { ...item, checked: !item.checked } : item));
+		setItems(listItems);
+		localStorage.setItem('shoppinglist', JSON.stringify(listItems));
+	};
+
+	const hanldeDelete = (id) => {
+		const listItems = items.filter((item) => item.id !== id);
+		setItems(listItems);
+		localStorage.setItem('shoppinglist', JSON.stringify(listItems));
+	};
+
+	return (
+		<div className='App'>
+			<Header />
+			<Content items={items} handleCheck={handleCheck} hanldeDelete={hanldeDelete} />
+			<Footer length={items.length} />
+		</div>
+	);
 }
 
 export default App;
